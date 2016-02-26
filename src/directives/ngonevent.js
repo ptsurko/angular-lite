@@ -1,5 +1,4 @@
 
-//TODO:
 function NgOnEvent($attr) {
   return {
     scope: false,

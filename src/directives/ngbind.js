@@ -11,8 +11,8 @@ function NgBind() {
       });
 
       function setValue(element, value) {
-        if (element.nodeType == "INPUT") {
-          //TODO: consider to add binding to appropriate input property
+        if (element.nodeType === 'INPUT') {
+          // TODO: consider to add binding to appropriate input property
         } else {
           element.innerText = value;
         }

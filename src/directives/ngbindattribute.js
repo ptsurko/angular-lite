@@ -12,5 +12,5 @@ function NgBindAttribute($attr) {
     }
   };
 };
-//TODO: rename to ng-prop
+// TODO: rename to ng-prop
 NgBindAttribute.ATTR_NAME = 'ng-attr.';

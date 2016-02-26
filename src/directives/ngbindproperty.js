@@ -1,5 +1,5 @@
 
-//TODO: Add directive for binding directly to property ng-bind-aria-role for example
+// TODO: Add directive for binding directly to property ng-bind-aria-role for example
 function NgBindProperty($attr) {
   return {
     scope: false,
@@ -13,5 +13,5 @@ function NgBindProperty($attr) {
     }
   };
 };
-//TODO: rename to ng-prop
+// TODO: rename to ng-prop
 NgBindProperty.ATTR_NAME = 'ng-prop.';

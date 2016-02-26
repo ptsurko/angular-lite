@@ -9,7 +9,7 @@ var Directive = (function() {
   Directive.DEFAULT_CONFIG = {
     scope: false,
     link: function() {}
-  }
+  };
 
   Directive.prototype.init = function() {
     this.register(NgController.ATTR_NAME, NgController);

@@ -28,7 +28,7 @@ var angular = (function() {
       $injector.invoke(configurator);
       return this;
     }
-    //TODO: add module system
+    // TODO: add module system
   };
 
   function service(name, func) {

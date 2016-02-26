@@ -11,5 +11,5 @@ var utils = (function() {
         return str;
       }).join('');
     }
-  }
+  };
 }());

@@ -4,8 +4,7 @@ function NgController($injector) {
     scope: true,
     link: function(scope, attrs, element) {
       var controllerName = attrs[NgController.ATTR_NAME];
-      var controller = $injector.get(controllerName + NgController.$CONTROLLER_SUFFIX, {'$scope': scope});
-
+      $injector.get(controllerName + NgController.$CONTROLLER_SUFFIX, {'$scope': scope});
     }
   };
 };

@@ -13,7 +13,7 @@ var Compile = (function() {
   };
 
   Compile.prototype.compile = function(node, scope) {
-    if (node.nodeType == NODE_TYPE.ELEMENT) {
+    if (node.nodeType === NODE_TYPE.ELEMENT) {
       var directives = [];
       var attrs = {};
       Array.prototype.forEach.call(node.attributes, function(attr) {

@@ -1,7 +1,7 @@
 
-//TODO: add local dependencies (scope, element, etc.)
-//TODO: add caching for resolvables to make them as singleton.
-//TODO: add support for providers with $get method - to allow configation of service before resolving
+// TODO: add local dependencies (scope, element, etc.)
+// TODO: add caching for resolvables to make them as singleton.
+// TODO: add support for providers with $get method - to allow configation of service before resolving
 var Injector = (function() {
   function Injector() {
     this.registry_ = {};
@@ -20,7 +20,7 @@ var Injector = (function() {
   Injector.prototype.get = function(name, locals) {
     var registered = this.registry_[name];
     if (registered) {
-      if (typeof registered === "function") {
+      if (typeof registered === 'function') {
         return this.invoke(registered, locals);
       } else {
         return registered;
@@ -50,7 +50,7 @@ var Injector = (function() {
           .replace(/\/\*[\s\S]*?\*\//gm, '')
           .match(/\(([^\)]*)\)/);
       if (matches && matches[1]) {
-        return matches[1].split(',').map(function (match) {
+        return matches[1].split(',').map(function(match) {
           return match.trim();
         });
       }
@@ -76,4 +76,4 @@ var Injector = (function() {
     }.bind(this));
   };
   return Injector;
-}())
+}());
