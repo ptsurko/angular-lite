@@ -1,5 +1,6 @@
 
 //TODO: add local dependencies (scope, element, etc.)
+//TODO: add caching for resolvables to make them as singleton.
 //TODO: add support for providers with $get method - to allow configation of service before resolving
 var Injector = (function() {
   function Injector() {
@@ -35,7 +36,7 @@ var Injector = (function() {
       injectionArgs.unshift(null);
       return new (Function.prototype.bind.apply(factory, injectionArgs))();
     } else {
-      var self = {}
+      var self = {};
       var result = factory.apply(self, this.getInjectionArgs_(factory, locals));
       return result || self;
     }

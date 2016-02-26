@@ -3,40 +3,31 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <script src="src/utils.js"></script>
     <script src="src/injector.js"></script>
     <script src="src/provide.js"></script>
     <script src="src/scope.js"></script>
     <script src="src/compile.js"></script>
+    <script src="src/directive.js"></script>
     <script src="src/directives/ngcontroller.js"></script>
     <script src="src/directives/ngbind.js"></script>
-    <script src="src/directives/ngclick.js"></script>
+    <script src="src/directives/ngbindattribute.js"></script>
+    <script src="src/directives/ngbindproperty.js"></script>
+    <script src="src/directives/ngonevent.js"></script>
     <script src="src/angular.js"></script>
   </head>
   <body>
     <div id="main" ng-controller="MainController">
       <span ng-bind="counter"></span>
-      <button ng-click="increase()">Increase</button>
+      <span ng-prop.inner-text="counter + 1" ng-attr.aria-role="ariaRole"></span>
+      <button ng-on-click="increase()">Increase</button>
+      <button ng-on-mousedown="increase()" ng-on-mouseup="increase()">Increase</button>
     </div>
     <script>
-      // var scope = new Scope();
-      // var injector = new Injector();
-      // var provide = new Provide(injector);
-      // provide.value('$injector', injector);
-      // provide.service('Service', function() {
-      //
-      // });
-      // provide.service('MainControllerController', function($injector, Service) {
-      //
-      // });
-      // provide.service('ng-controllerDirective', NgController);
-      //
-      // var domCompiler = new DomCompiler(injector);
-      // var div = document.getElementById('main');
-      // domCompiler.compile(div, scope);
-
       angular
         .controller('MainController', function($scope) {
           $scope.counter = 0;
+          $scope.ariaRole = 'hidden';
           $scope.increase = function() {
             $scope.counter++;
           }

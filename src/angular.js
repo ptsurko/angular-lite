@@ -8,12 +8,12 @@ var angular = (function() {
   $provide.value('$rootScope', $rootScope);
   $provide.value('$provide', $provide);
   $provide.service('$compile', Compile);
+  $provide.service('$directive', Directive);
 
   var $compile = $injector.get('$compile');
+  var $directive = $injector.get('$directive');
 
-  directive(NgController.$CONTROLLER_ATTR, NgController);
-  directive(NgBind.$BIND_ATTR, NgBind);
-  directive(NgClick.$CLICK_ATTR, NgClick);
+  $directive.init();
 
   return {
     service: service,
@@ -47,7 +47,7 @@ var angular = (function() {
   }
 
   function directive(name, func) {
-    $provide.service(name + Compile.$DIRECTIVE_SUFFIX, func);
+    $directive.register(name, func);
     return this;
   }
 }());

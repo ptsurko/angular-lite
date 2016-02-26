@@ -1,34 +1,33 @@
 
 var Compile = (function() {
   var SCOPE_PROPERTY = '$scope';
-  var DIRECTIVE_PROPERTY = '$scope';
 
   var NODE_TYPE = {
     ELEMENT: 1,
     TEXT: 3
   };
 
-  function Compile($injector) {
+  function Compile($injector, $directive) {
     this.$injector_ = $injector;
+    this.$directive_ = $directive;
   };
-  Compile.$DIRECTIVE_SUFFIX = 'Directive';
-  Compile.$DIRECTIVE_DEFAULT = {
-    scope: false,
-    link: function() {}
-  }
 
   Compile.prototype.compile = function(node, scope) {
     if (node.nodeType == NODE_TYPE.ELEMENT) {
-      var attrs = this.getElementAttributesWithDirective_(node);
       var directives = [];
-      for (var attr in attrs) {
-        directives.push(this.$injector_.get(attr + Compile.$DIRECTIVE_SUFFIX));
-      }
+      var attrs = {};
+      Array.prototype.forEach.call(node.attributes, function(attr) {
+        var directive = this.$directive_.get(attr.nodeName);
+        if (directive) {
+          directives.push(directive);
+          attrs[attr.nodeName] = attr.nodeValue;
+        }
+      }.bind(this));
 
-      //TODO: using only one scope for element
+      // //TODO: using only one scope for element
       directives.forEach(function(directive) {
-        var dir = Object.assign({}, Compile.$DIRECTIVE_DEFAULT, directive)
-        this.linkDirective_(dir, node, attrs, scope);
+        var directiveConfig = Object.assign({}, Directive.DEFAULT_CONFIG, directive)
+        this.linkDirective_(directiveConfig, node, attrs, scope);
       }.bind(this));
     }
 
@@ -52,15 +51,6 @@ var Compile = (function() {
     if (controller && controller.$onInit) {
       controller.$onInit();
     }
-  };
-
-  Compile.prototype.getElementAttributesWithDirective_ = function(el) {
-    return Array.prototype.reduce.call(el.attributes, function(result, attr) {
-      if (this.$injector_.has(attr.nodeName + Compile.$DIRECTIVE_SUFFIX)) {
-        result[attr.nodeName] = attr.nodeValue;
-      }
-      return result;
-    }.bind(this), {});
   };
   return Compile;
 }());

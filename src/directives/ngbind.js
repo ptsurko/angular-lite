@@ -3,10 +3,10 @@ function NgBind() {
   return {
     scope: false,
     link: function(scope, attrs, element) {
-      var value = scope.$eval(attrs[NgBind.$BIND_ATTR]);
+      var value = scope.$eval(attrs[NgBind.ATTR_NAME]);
       setValue(element, value);
 
-      scope.$watch(attrs[NgBind.$BIND_ATTR], function(newValue) {
+      scope.$watch(attrs[NgBind.ATTR_NAME], function(newValue) {
         setValue(element, newValue);
       });
 
@@ -20,4 +20,4 @@ function NgBind() {
     }
   };
 };
-NgBind.$BIND_ATTR = 'ng-bind';
+NgBind.ATTR_NAME = 'ng-bind';

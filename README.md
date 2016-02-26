@@ -3,7 +3,8 @@ Angular Lite - lightweight Angular implementation inspired by http://blog.mgeche
 
 
 Lessons learned:
-http://stackoverflow.com/a/8843181
+Indirect call of constructor function with array of parameters - http://stackoverflow.com/a/8843181
+
 
 Resources used:
 How data binding work -  http://stackoverflow.com/questions/9682092/how-does-data-binding-work-in-angularjs/9693933#9693933
@@ -26,3 +27,7 @@ https://toddmotto.com/a-comprehensive-dive-into-nodelists-arrays-converting-node
 
 For-in loop and iteration:
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in
+
+
+Angular2 and Aurelia:
+Porting an Angular 2.0 App to Aurelia - http://eisenbergeffect.bluespire.com/porting-an-angular-2-0-app-to-aurelia/
