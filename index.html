@@ -20,8 +20,8 @@
     <div id="main" ng-controller="MainController">
       <span ng-bind="counter"></span>
       <span ng-prop.inner-text="counter + 1" ng-attr.aria-role="ariaRole"></span>
-      <button ng-on-click="increase()">Increase</button>
-      <button ng-on-mousedown="increase()" ng-on-mouseup="increase()">Increase</button>
+      <button ng-on.click="increase()">Increase</button>
+      <button ng-on.mousedown="increase()" ng-on-mouseup="increase()">Increase</button>
     </div>
     <script>
       angular

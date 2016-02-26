@@ -6,7 +6,6 @@ function NgOnEvent($attr) {
     link: function(scope, attrs, element) {
       var eventName = $attr.replace(NgOnEvent.ATTR_NAME, '');
       var expression = attrs[$attr];
-      // debugger
 
       element.addEventListener(eventName, function() {
         scope.$apply(function() {
@@ -16,4 +15,4 @@ function NgOnEvent($attr) {
     }
   };
 };
-NgOnEvent.ATTR_NAME = 'ng-on-';
+NgOnEvent.ATTR_NAME = 'ng-on.';
