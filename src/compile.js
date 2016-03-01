@@ -12,6 +12,7 @@ var Compile = (function() {
     this.$directive_ = $directive;
   };
 
+  //TODO: make compile function to return link function
   Compile.prototype.compile = function(node, scope) {
     if (node.nodeType === NODE_TYPE.ELEMENT) {
       var directives = [];
@@ -26,7 +27,7 @@ var Compile = (function() {
 
       // //TODO: using only one scope for element
       directives.forEach(function(directive) {
-        var directiveConfig = Object.assign({}, Directive.DEFAULT_CONFIG, directive)
+        var directiveConfig = Object.assign({}, Directive.DEFAULT_CONFIG, directive);
         this.linkDirective_(directiveConfig, node, attrs, scope);
       }.bind(this));
     }

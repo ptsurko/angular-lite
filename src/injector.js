@@ -20,7 +20,7 @@ var Injector = (function() {
   Injector.prototype.get = function(name, locals) {
     var registered = this.registry_[name];
     if (registered) {
-      if (typeof registered === 'function') {
+      if (utils.isFunction(registered)) {
         return this.invoke(registered, locals);
       } else {
         return registered;
