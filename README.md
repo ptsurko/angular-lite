@@ -11,7 +11,7 @@ Angular Lite - lightweight Angular implementation inspired by [Minko Gechev](htt
  - [x] Directives
    - [x] Property binding using *ng-prop.inner-text*
    - [x] Attribute binding using *ng-attr.aria-role*
-   - [ ] Templates
+   - [x] Templates
    - [ ] Transclusion [How transclusion works in Angular](http://teropa.info/blog/2015/06/09/transclusion.html)
    - [ ] "require" property to inject some parent directive/components
    - [ ] ng-if directive

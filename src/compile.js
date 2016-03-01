@@ -29,20 +29,8 @@ var Compile = (function() {
   };
 
   Compile.prototype.compileElement_ = function(element) {
-    var directives = [];
-    //TODO: attrs should have all attributes from element
-    var attrs = {};
-
-    Array.prototype.forEach.call(element.attributes, function(attr) {
-      var directive = this.$directive_.get(attr.nodeName);
-      if (directive) {
-        directives.push(Object.assign({}, Directive.DEFAULT_CONFIG, directive));
-        attrs[attr.nodeName] = attr.nodeValue;
-      }
-    }.bind(this));
-    directives.sort(function(d1, d2) {
-      return d2.priority - d1.priority;
-    });
+    var directives = this.getElementDirectives_(element);
+    var attrs = this.getElementAttributes_(element);
 
     var childLinkFunctions = [];
     Array.prototype.forEach.call(element.childNodes, function(child) {
@@ -99,6 +87,28 @@ var Compile = (function() {
     if (controller && controller.$onInit) {
       controller.$onInit();
     }
+  };
+
+  Compile.prototype.getElementDirectives_ = function(element) {
+    var directives = Array.prototype.reduce.call(element.attributes, function(directives, attr) {
+      var directive = this.$directive_.get(attr.nodeName);
+      if (directive) {
+        directives.push(Object.assign({}, Directive.DEFAULT_CONFIG, directive));
+      }
+      return directives;
+    }.bind(this), []);
+    directives.sort(function(d1, d2) {
+      return d2.priority - d1.priority;
+    });
+
+    return directives;
+  };
+
+  Compile.prototype.getElementAttributes_ = function(element) {
+    return Array.prototype.reduce.call(element.attributes, function(attrs, attr) {
+      attrs[attr.nodeName] = attr.nodeValue;
+      return attrs;
+    }, []);
   };
   return Compile;
 }());
