@@ -12,30 +12,38 @@ var Compile = (function() {
     this.$directive_ = $directive;
   };
 
-  //TODO: make compile function to return link function
-  Compile.prototype.compile = function(node, scope) {
+  Compile.prototype.compile = function(node) {
     if (node.nodeType === NODE_TYPE.ELEMENT) {
       var directives = [];
       var attrs = {};
+
       Array.prototype.forEach.call(node.attributes, function(attr) {
         var directive = this.$directive_.get(attr.nodeName);
         if (directive) {
-          directives.push(directive);
+          directives.push(Object.assign({}, Directive.DEFAULT_CONFIG, directive));
           attrs[attr.nodeName] = attr.nodeValue;
         }
       }.bind(this));
 
-      // //TODO: using only one scope for element
-      directives.forEach(function(directive) {
-        var directiveConfig = Object.assign({}, Directive.DEFAULT_CONFIG, directive);
-        this.linkDirective_(directiveConfig, node, attrs, scope);
+      var childLinkFunctions = [];
+      Array.prototype.forEach.call(node.childNodes, function(child) {
+        var linkFunc = this.compile(child);
+        if (linkFunc) {
+          childLinkFunctions.push(linkFunc);
+        }
       }.bind(this));
-    }
 
-    var nodeScope = node[SCOPE_PROPERTY] || scope;
-    Array.prototype.forEach.call(node.childNodes, function(child) {
-      this.compile(child, nodeScope);
-    }.bind(this));
+      return function link(scope) {
+        directives.forEach(function(directive) {
+          this.linkDirective_(directive, node, attrs, scope);
+        }.bind(this));
+
+        var nodeScope = node[SCOPE_PROPERTY] || scope;
+        childLinkFunctions.forEach(function(linkFunc) {
+          linkFunc(nodeScope);
+        });
+      }.bind(this);
+    }
   };
 
   Compile.prototype.linkDirective_ = function(dir, element, attrs, scope) {
