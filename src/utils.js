@@ -15,6 +15,14 @@ var utils = (function() {
       return typeof func === 'function';
     },
 
+    isString: function(obj) {
+      return typeof obj === 'string';
+    },
+
+    isDOMNode: function(obj) {
+      return obj instanceof HTMLElement;
+    },
+
     // http://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-clone-an-object/122190#122190
     cloneObject: function(obj) {
       if (obj === null || typeof obj !== 'object' || 'isActiveClone' in obj) {

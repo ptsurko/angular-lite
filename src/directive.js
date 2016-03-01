@@ -7,6 +7,8 @@ var Directive = (function() {
     this.$injector_ = $injector;
   };
   Directive.DEFAULT_CONFIG = {
+    priority: 100,
+    terminate: false,
     scope: false,
     link: function() {}
   };
@@ -17,16 +19,17 @@ var Directive = (function() {
   };
 
   Directive.prototype.get = function(attr, locals) {
-    var directive = this.$injector_.get(attr + DIRECTIVE_SUFFIX, locals)
+    var directive = this.$injector_.get(attr + DIRECTIVE_SUFFIX, locals);
     if (!directive) {
+      var propLocals;
       if (attr.startsWith(NgBindProperty.ATTR_NAME)) {
-        var propLocals = Object.assign({}, locals, {$attr: attr});
+        propLocals = Object.assign({}, locals, {$attr: attr});
         directive = this.$injector_.invoke(NgBindProperty, propLocals);
       } else if (attr.startsWith(NgBindAttribute.ATTR_NAME)) {
-        var propLocals = Object.assign({}, locals, {$attr: attr});
+        propLocals = Object.assign({}, locals, {$attr: attr});
         directive = this.$injector_.invoke(NgBindAttribute, propLocals);
       } else if (attr.startsWith(NgOnEvent.ATTR_NAME)) {
-        var propLocals = Object.assign({}, locals, {$attr: attr});
+        propLocals = Object.assign({}, locals, {$attr: attr});
         directive = this.$injector_.invoke(NgOnEvent, propLocals);
       }
     }

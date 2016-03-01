@@ -13,49 +13,75 @@ var Compile = (function() {
   };
 
   Compile.prototype.compile = function(node) {
-    if (node.nodeType === NODE_TYPE.ELEMENT) {
-      var directives = [];
-      var attrs = {};
+    if (utils.isString(node)) {
+      var tempDiv = document.createElement('div');
+      tempDiv.innerHTML = node;
+      if (tempDiv.childNodes.length > 1) {
+        throw new Error('Template can have only one root element.');
+      }
 
-      Array.prototype.forEach.call(node.attributes, function(attr) {
-        var directive = this.$directive_.get(attr.nodeName);
-        if (directive) {
-          directives.push(Object.assign({}, Directive.DEFAULT_CONFIG, directive));
-          attrs[attr.nodeName] = attr.nodeValue;
-        }
-      }.bind(this));
-
-      var childLinkFunctions = [];
-      Array.prototype.forEach.call(node.childNodes, function(child) {
-        var linkFunc = this.compile(child);
-        if (linkFunc) {
-          childLinkFunctions.push(linkFunc);
-        }
-      }.bind(this));
-
-      return function link(scope) {
-        directives.forEach(function(directive) {
-          this.linkDirective_(directive, node, attrs, scope);
-        }.bind(this));
-
-        var nodeScope = node[SCOPE_PROPERTY] || scope;
-        childLinkFunctions.forEach(function(linkFunc) {
-          linkFunc(nodeScope);
-        });
-      }.bind(this);
+      return this.compile(tempDiv.childNodes[0]);
+    } else if (utils.isDOMNode(node)) {
+      if (node.nodeType === NODE_TYPE.ELEMENT) {
+        return this.compileElement_(node);
+      }
     }
   };
 
+  Compile.prototype.compileElement_ = function(element) {
+    var directives = [];
+    var attrs = {};
+
+    Array.prototype.forEach.call(element.attributes, function(attr) {
+      var directive = this.$directive_.get(attr.nodeName);
+      if (directive) {
+        directives.push(Object.assign({}, Directive.DEFAULT_CONFIG, directive));
+        attrs[attr.nodeName] = attr.nodeValue;
+      }
+    }.bind(this));
+    directives.sort(function(d1, d2) {
+      return d2.priority - d1.priority;
+    });
+
+    var childLinkFunctions = [];
+    Array.prototype.forEach.call(element.childNodes, function(child) {
+      var linkFunc = this.compile(child);
+      if (linkFunc) {
+        childLinkFunctions.push(linkFunc);
+      }
+    }.bind(this));
+
+    return function link(scope) {
+      var index = 0;
+      while (index < directives.length) {
+        var directive = directives[index++];
+        this.linkDirective_(directive, element, attrs, scope);
+        if (directive.terminate) {
+          break;
+        }
+      }
+
+      var elementScope = element[SCOPE_PROPERTY] || scope;
+      childLinkFunctions.forEach(function(linkFunc) {
+        linkFunc(elementScope);
+      });
+    }.bind(this);
+  };
+
   Compile.prototype.linkDirective_ = function(dir, element, attrs, scope) {
-    var nodeScope = dir.scope ? scope.$new() : scope;
-    element[SCOPE_PROPERTY] = nodeScope;
+    if (dir.scope && element[SCOPE_PROPERTY]) {
+      throw new Error('Element can have only one property');
+    }
+
+    var elementScope = dir.scope ? scope.$new() : scope;
+    element[SCOPE_PROPERTY] = elementScope;
 
     var controller;
     if (dir.controller) {
-      controller = this.$injector_.invoke(dir.controller, {'$scope': nodeScope});
+      controller = this.$injector_.invoke(dir.controller, {'$scope': elementScope});
     }
 
-    dir.link(nodeScope, attrs, element, controller);
+    dir.link(elementScope, attrs, element, controller);
 
     if (controller && controller.$onInit) {
       controller.$onInit();

@@ -22,6 +22,7 @@
       <span ng-prop.inner-text="counter + 1" ng-attr.aria-role="ariaRole"></span>
       <button ng-on.click="increase()">Increase</button>
       <button ng-on.mousedown="increase()" ng-on-mouseup="increase()">Increase</button>
+      <div priority1 priority2></div>
     </div>
     <script>
       angular
@@ -32,11 +33,20 @@
             $scope.counter++;
           }
         })
-        .directive('Template', function() {
+        .directive('priority1', function() {
           return {
-            template: '<div>Test</div>',
+            priority: 200,
             link: function() {
-
+              console.log('should not be called');
+            }
+          }
+        })
+        .directive('priority2', function() {
+          return {
+            priority: 400,
+            terminate: true,
+            link: function() {
+              console.log('should be called');
             }
           }
         })
