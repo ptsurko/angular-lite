@@ -30,6 +30,7 @@ var Compile = (function() {
 
   Compile.prototype.compileElement_ = function(element) {
     var directives = [];
+    //TODO: attrs should have all attributes from element
     var attrs = {};
 
     Array.prototype.forEach.call(element.attributes, function(attr) {
@@ -65,6 +66,8 @@ var Compile = (function() {
       childLinkFunctions.forEach(function(linkFunc) {
         linkFunc(elementScope);
       });
+
+      return element;
     }.bind(this);
   };
 
@@ -77,6 +80,16 @@ var Compile = (function() {
     element[SCOPE_PROPERTY] = elementScope;
 
     var controller;
+    if (dir.template) {
+      var templateLink = this.compile(dir.template);
+      var templateEl = templateLink(elementScope);
+
+      while (element.firstChild) {
+        element.removeChild(element.firstChild);
+      }
+      element.appendChild(templateEl);
+    }
+
     if (dir.controller) {
       controller = this.$injector_.invoke(dir.controller, {'$scope': elementScope});
     }

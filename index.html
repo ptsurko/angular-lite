@@ -23,6 +23,7 @@
       <button ng-on.click="increase()">Increase</button>
       <button ng-on.mousedown="increase()" ng-on-mouseup="increase()">Increase</button>
       <div priority1 priority2></div>
+      <div template>This should be replaced by template</div>
     </div>
     <script>
       angular
@@ -32,6 +33,14 @@
           $scope.increase = function() {
             $scope.counter++;
           }
+        })
+        .directive('template', function() {
+          return {
+            template: '<div>Directive\'s template</div>',
+            link: function() {
+
+            }
+          };
         })
         .directive('priority1', function() {
           return {
