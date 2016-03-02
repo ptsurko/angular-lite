@@ -66,12 +66,38 @@ var Scope = (function() {
     }
   };
 
-  Scope.prototype.$watch = function(expr, callback) {
-    this.$$watchers.push({
+  Scope.prototype.$watch = function(expr, listenerFn) {
+    var self = this;
+    var watch = {
       expr: expr,
-      callback: callback,
-      last: undefined
-    });
+      listenerFn: listenerFn,
+      last: undefined,
+      equalityFn: utils.objectsEquals
+    };
+    this.$$watchers.push(watch);
+    return function() {
+      var watchIndex = self.$$watchers.indexOf(watch);
+      if (watchIndex >= 0) {
+        self.$$watchers.splice(watchIndex, 1);
+      }
+    };
+  };
+
+  Scope.prototype.$watchCollection = function(expr, listenerFn) {
+    var self = this;
+    var watch = {
+      expr: expr,
+      listenerFn: listenerFn,
+      last: undefined,
+      equalityFn: utils.arraysEquals
+    };
+    self.$$watchers.push(watch);
+    return function() {
+      var watchIndex = self.$$watchers.indexOf(watch);
+      if (watchIndex >= 0) {
+        self.$$watchers.splice(watchIndex, 1);
+      }
+    };
   };
 
   Scope.prototype.$apply = function(callback) {
@@ -88,27 +114,33 @@ var Scope = (function() {
 
   Scope.prototype.$digest = function() {
     var dirty;
-    var cycleIndex = 0
+    var cycleIndex = 0;
+
     do {
       if (cycleIndex > Scope.maxDigestCycles) {
         break;
       }
 
-      dirty = false; //do-while cysle is necessary to cover dependent properties.
-      this.$$watchers.forEach(function(watcher) {
-        var currentValue = this.$eval(watcher.expr);
-        if (!utils.objectsEquals(currentValue, watcher.last)) {
-          watcher.callback(currentValue, watcher.last);
-          watcher.last = utils.cloneObject(currentValue);
-          dirty = true;
-        }
-      }.bind(this));
+      dirty = this.$$digestOnce();
       cycleIndex++;
-    } while(dirty);
+    } while(dirty); //do-while cysle is necessary to cover dependent properties.
 
     this.$$children.forEach(function(childScope) {
       childScope.$digest();
     });
+  };
+
+  Scope.prototype.$$digestOnce = function() {
+    var dirty = false;
+    this.$$watchers.forEach(function(watcher) {
+      var currentValue = this.$eval(watcher.expr);
+      if (!watcher.equalityFn(currentValue, watcher.last)) {
+        watcher.listenerFn(currentValue, watcher.last);
+        watcher.last = utils.cloneObject(currentValue);
+        dirty = true;
+      }
+    }.bind(this));
+    return dirty;
   };
 
   return Scope;

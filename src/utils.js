@@ -86,6 +86,24 @@ var utils = (function() {
         }
       }
       return true;
+    },
+
+    arraysEquals: function(x, y) {
+      if (x === y) {
+        return true;
+      }
+
+      if (x.length !== y.length) {
+        return false;
+      }
+
+      for (var i = 0; i < x.length; i++) {
+        if (x[i] !== y[i]) {
+          return false;
+        }
+      }
+
+      return true;
     }
   };
 }());

@@ -6,8 +6,8 @@ Angular Lite - lightweight Angular implementation inspired by [Minko Gechev](htt
 ## Features:
  - [x] Scope
    - [ ] Isolated scope
-   - [ ] [Scope life-cycle](https://docs.angularjs.org/guide/scope)
-   - [ ] Watch collection
+   - [x] [Scope life-cycle](https://docs.angularjs.org/guide/scope)
+   - [x] Watch collection
  - [x] Templates
    - [ ] Support for expressions {{}}
  - [ ] Filters
@@ -18,8 +18,8 @@ Angular Lite - lightweight Angular implementation inspired by [Minko Gechev](htt
    - [x] Templates
    - [ ] Transclusion [How transclusion works in Angular](http://teropa.info/blog/2015/06/09/transclusion.html), [Transclusion](https://docs.angularjs.org/api/ng/service/$compile#transclusion)
    - [ ] "require" property to inject some parent directive/components
-   - [ ] ng-if directive
-   - [ ] ng-repeat directive. [How ng-repeat works](https://code.angularjs.org/1.4.9/docs/guide/compiler)
+   - [ ] "ng-if" directive
+   - [ ] "ng-repeat" directive. [How ng-repeat works](https://code.angularjs.org/1.4.9/docs/guide/compiler)
    - [ ]
  - [ ] Components as custom elements
    - [ ]
