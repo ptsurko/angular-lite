@@ -24,7 +24,7 @@ Angular Lite - lightweight Angular implementation inspired by [Minko Gechev](htt
  - [ ] Components as custom elements
    - [ ]
  - [x] Controller directive
-   - [ ] "controller as" feature
+   - [x] "controller as" feature
    - [ ]
  - [x] Dependency injection
    - [ ] Results caching

@@ -20,14 +20,21 @@
   </head>
   <body>
     <div id="main" ng-controller="MainController">
-      <span ng-bind="counter"></span>
-      <span ng-prop.inner-text="counter + 1" ng-attr.aria-role="ariaRole"></span>
-      <button ng-on.click="increase()">Increase</button>
-      <button ng-on.mousedown="increase()" ng-on.mouseup="increase()">Increase</button>
+      <div>
+        <h1>Counter</h1>
+        <span ng-bind="counter"></span>
+        <span ng-prop.inner-text="counter + 1" ng-attr.aria-role="ariaRole"></span>
+        <button ng-on.click="increase()">Increase</button>
+        <button ng-on.mousedown="increase()" ng-on.mouseup="increase()">Increase</button>
+      </div>
       <div priority1 priority2></div>
       <div template>This should be replaced by template</div>
       <div ng-if="show">Content to show/hide</div>
       <button ng-on.click="toggle()">Toggle</button>
+      <div ng-controller="ControllerAs as ctrl">
+        <span ng-bind="ctrl.text"></span>
+      </div>
+      <div directivewithcontrolleras></div>
     </div>
     <script>
       angular
@@ -41,6 +48,19 @@
           $scope.toggle = function() {
             $scope.show = !$scope.show;
           };
+        })
+        .controller('ControllerAs', function($scope) {
+          var vm = this;
+          vm.text = 'Controller As Text';
+        })
+        .directive('directivewithcontrolleras', function() {
+          return {
+            template: '<div ng-bind="$ctrl.text"></div>',
+            controllerAs: '$ctrl',
+            controller: function() {
+              this.text = 'Directive with controller as';
+            }
+          }
         })
         .directive('template', function() {
           return {

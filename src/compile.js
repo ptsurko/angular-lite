@@ -21,10 +21,10 @@ var Compile = (function() {
       }
 
       return this.compile(tempDiv.childNodes[0]);
-    } else if (utils.isDOMNode(node)) {
-      if (node.nodeType === NODE_TYPE.ELEMENT) {
-        return this.compileElement_(node);
-      }
+    } if (node.nodeType === NODE_TYPE.ELEMENT) {
+      return this.compileElement_(node);
+    } else if (node.nodeType === NODE_TYPE.TEXT) {
+      return this.compileTextNode_(node);
     }
   };
 
@@ -69,6 +69,10 @@ var Compile = (function() {
     }.bind(this);
   };
 
+  Compile.prototype.compileTextNode_ = function(node) {
+
+  };
+
   Compile.prototype.linkDirective_ = function(dir, element, attrs, scope) {
     var controller;
     if (dir.template) {
@@ -83,6 +87,9 @@ var Compile = (function() {
 
     if (dir.controller) {
       controller = this.$injector_.invoke(dir.controller, {'$scope': scope});
+      if (dir.controllerAs) {
+        scope[dir.controllerAs] = controller;
+      }
     }
 
     dir.link(scope, attrs, element, controller);
