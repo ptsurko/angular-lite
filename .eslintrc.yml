@@ -3,6 +3,7 @@ plugins:
   - standard
 env:
   browser: true
+  jasmine: true
 globals:
   angular: 1
   utils: 1
