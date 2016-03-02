@@ -5,7 +5,6 @@ function NgBindProperty($attr) {
     scope: false,
     link: function(scope, attrs, element) {
       var propertyName = utils.toCamelCase($attr.replace(NgBindProperty.ATTR_NAME, ''));
-      element[propertyName] = scope.$eval(attrs[$attr]);
 
       scope.$watch(attrs[$attr], function(newValue) {
         element[propertyName] = scope.$eval(attrs[$attr]);

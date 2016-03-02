@@ -9,6 +9,7 @@ var Directive = (function() {
   Directive.DEFAULT_CONFIG = {
     priority: 100,
     terminate: false,
+    transclude: false,
     scope: false,
     link: function() {}
   };
@@ -16,6 +17,7 @@ var Directive = (function() {
   Directive.prototype.init = function() {
     this.register(NgController.ATTR_NAME, NgController);
     this.register(NgBind.ATTR_NAME, NgBind);
+    this.register(NgIf.ATTR_NAME, NgIf);
   };
 
   Directive.prototype.get = function(attr, locals) {

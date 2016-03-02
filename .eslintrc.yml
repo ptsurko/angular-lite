@@ -16,6 +16,8 @@ globals:
   NgBindAttribute: 1
   NgBindProperty: 1
   NgOnEvent: 1
+  NgIf: 1
+  NgRepeat: 1
 rules:
   semi:
     - 2

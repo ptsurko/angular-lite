@@ -8,11 +8,15 @@ Angular Lite - lightweight Angular implementation inspired by [Minko Gechev](htt
    - [ ] Isolated scope
    - [ ] [Scope life-cycle](https://docs.angularjs.org/guide/scope)
    - [ ] Watch collection
+ - [x] Templates
+   - [ ] Support for expressions {{}}
+ - [ ] Filters
+   - [ ]
  - [x] Directives
    - [x] Property binding using *ng-prop.inner-text*
    - [x] Attribute binding using *ng-attr.aria-role*
    - [x] Templates
-   - [ ] Transclusion [How transclusion works in Angular](http://teropa.info/blog/2015/06/09/transclusion.html)
+   - [ ] Transclusion [How transclusion works in Angular](http://teropa.info/blog/2015/06/09/transclusion.html), [Transclusion](https://docs.angularjs.org/api/ng/service/$compile#transclusion)
    - [ ] "require" property to inject some parent directive/components
    - [ ] ng-if directive
    - [ ] ng-repeat directive. [How ng-repeat works](https://code.angularjs.org/1.4.9/docs/guide/compiler)
@@ -23,7 +27,7 @@ Angular Lite - lightweight Angular implementation inspired by [Minko Gechev](htt
    - [ ] "controller as" feature
    - [ ]
  - [x] Dependency injection
-   - [ ] results caching
+   - [ ] Results caching
    - [ ] Support for providers in DI. Provider - is a way to customize resolving of some dependencies(for example $element, or parent components etc.)
    - [ ]
  - [ ] Add some examples

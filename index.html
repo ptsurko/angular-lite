@@ -14,6 +14,8 @@
     <script src="src/directives/ngbindattribute.js"></script>
     <script src="src/directives/ngbindproperty.js"></script>
     <script src="src/directives/ngonevent.js"></script>
+    <script src="src/directives/ngif.js"></script>
+    <script src="src/directives/ngrepeat.js"></script>
     <script src="src/angular.js"></script>
   </head>
   <body>
@@ -24,15 +26,21 @@
       <button ng-on.mousedown="increase()" ng-on.mouseup="increase()">Increase</button>
       <div priority1 priority2></div>
       <div template>This should be replaced by template</div>
+      <div ng-if="show">Content to show/hide</div>
+      <button ng-on.click="toggle()">Toggle</button>
     </div>
     <script>
       angular
         .controller('MainController', function($scope) {
           $scope.counter = 0;
           $scope.ariaRole = 'hidden';
+          $scope.show = false;
           $scope.increase = function() {
             $scope.counter++;
-          }
+          };
+          $scope.toggle = function() {
+            $scope.show = !$scope.show;
+          };
         })
         .directive('template', function() {
           return {

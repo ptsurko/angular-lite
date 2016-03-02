@@ -7,8 +7,10 @@ var Scope = (function() {
     this.$$watchers = [];
     this.$$children = [];
     this.$parent = parent;
+    this.$$destroyables_ = [];
     this.id = globalIndex++;
   }
+  Scope.maxDigestCycles = 10;
 
   Scope.prototype.$new = function() {
     var ScopeCtor = function(parent) {
@@ -31,8 +33,15 @@ var Scope = (function() {
       childScope.$parent = null;
       childScope.$destroy();
     });
-    this.$$children = null;
+    this.$$destroyables_.forEach(function(callback) {
+      callback();
+    });
 
+    this.$$children = null;
+  };
+
+  Scope.prototype.$addOnDestroy = function(callback) {
+    this.$$destroyables_.push(callback);
   };
 
   // Scope.prototype.$new = function() {
@@ -61,7 +70,7 @@ var Scope = (function() {
     this.$$watchers.push({
       expr: expr,
       callback: callback,
-      last: utils.cloneObject(this.$eval(expr))
+      last: undefined
     });
   };
 
@@ -79,16 +88,22 @@ var Scope = (function() {
 
   Scope.prototype.$digest = function() {
     var dirty;
+    var cycleIndex = 0
     do {
+      if (cycleIndex > Scope.maxDigestCycles) {
+        break;
+      }
+
       dirty = false; //do-while cysle is necessary to cover dependent properties.
       this.$$watchers.forEach(function(watcher) {
         var currentValue = this.$eval(watcher.expr);
         if (!utils.objectsEquals(currentValue, watcher.last)) {
           watcher.callback(currentValue, watcher.last);
-          watcher.last = currentValue;
+          watcher.last = utils.cloneObject(currentValue);
           dirty = true;
         }
       }.bind(this));
+      cycleIndex++;
     } while(dirty);
 
     this.$$children.forEach(function(childScope) {

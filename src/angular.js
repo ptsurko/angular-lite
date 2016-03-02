@@ -22,6 +22,7 @@ var angular = (function() {
     directive: directive,
     bootstrap: function() {
       $compile.compile(document.body)($rootScope);
+      $rootScope.$digest();
       return this;
     },
     config: function(configurator) {

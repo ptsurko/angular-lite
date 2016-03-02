@@ -42,15 +42,25 @@ var Compile = (function() {
 
     return function link(scope) {
       var index = 0;
+
+      var createNewScope = directives.reduce(function(createNewScope, dir) {
+        if (createNewScope && dir.scope) {
+          throw new Error('Element can have only one scope');
+        }
+        return createNewScope || dir.scope;
+      }, false);
+
+      var elementScope = createNewScope ? scope.$new() : scope;
+      element[SCOPE_PROPERTY] = elementScope;
+
       while (index < directives.length) {
         var directive = directives[index++];
-        this.linkDirective_(directive, element, attrs, scope);
+        this.linkDirective_(directive, element, attrs, elementScope);
         if (directive.terminate) {
           break;
         }
       }
 
-      var elementScope = element[SCOPE_PROPERTY] || scope;
       childLinkFunctions.forEach(function(linkFunc) {
         linkFunc(elementScope);
       });
@@ -60,17 +70,10 @@ var Compile = (function() {
   };
 
   Compile.prototype.linkDirective_ = function(dir, element, attrs, scope) {
-    if (dir.scope && element[SCOPE_PROPERTY]) {
-      throw new Error('Element can have only one property');
-    }
-
-    var elementScope = dir.scope ? scope.$new() : scope;
-    element[SCOPE_PROPERTY] = elementScope;
-
     var controller;
     if (dir.template) {
       var templateLink = this.compile(dir.template);
-      var templateEl = templateLink(elementScope);
+      var templateEl = templateLink(scope);
 
       while (element.firstChild) {
         element.removeChild(element.firstChild);
@@ -79,10 +82,10 @@ var Compile = (function() {
     }
 
     if (dir.controller) {
-      controller = this.$injector_.invoke(dir.controller, {'$scope': elementScope});
+      controller = this.$injector_.invoke(dir.controller, {'$scope': scope});
     }
 
-    dir.link(elementScope, attrs, element, controller);
+    dir.link(scope, attrs, element, controller);
 
     if (controller && controller.$onInit) {
       controller.$onInit();
