@@ -10,8 +10,11 @@ env:
 before_install:
   - chmod +x deploy_ghpages.sh
 before_script:
-  # - npm install
+  - npm install
+  - npm run test
 script: bash ./deploy_ghpages.sh
 branches:
   only:
     - master
+notifications:
+  email: false
