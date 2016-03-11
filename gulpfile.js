@@ -1,5 +1,7 @@
 var gulp = require('gulp');
 var Server = require('karma').Server;
+var process = require('process');
+var DEBUG = process.env.DEBUG;
 
 /**
  * Run test once and exit
@@ -7,6 +9,6 @@ var Server = require('karma').Server;
 gulp.task('test', function(done) {
   new Server({
     configFile: __dirname + '/karma.conf.js',
-    singleRun: true
+    singleRun: !DEBUG
   }, done).start();
 });
