@@ -9,6 +9,7 @@ globals:
   utils: 1
   Scope: 1
   Compile: 1
+  Parse: 1
   Directive: 1
   Provide: 1
   Injector: 1

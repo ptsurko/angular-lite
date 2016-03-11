@@ -7,6 +7,7 @@ var angular = (function() {
   $provide.value('$injector', $injector);
   $provide.value('$rootScope', $rootScope);
   $provide.value('$provide', $provide);
+  $provide.service('$parse', Parse);
   $provide.service('$compile', Compile);
   $provide.service('$directive', Directive);
 

@@ -93,7 +93,8 @@ var Parse = (function() {
     }
 
     this.tokens.push({
-      text: text
+      text: text,
+      identifier: true
     });
   };
 
@@ -126,6 +127,7 @@ var Parse = (function() {
   AST.Literal = 'Literal';
   AST.Array = 'Array';
   AST.Object = 'Object';
+  AST.Identifier = 'Identifier';
 
   AST.prototype.constants = {
     'null': {type: AST.Literal, value: null},
@@ -159,6 +161,8 @@ var Parse = (function() {
       return this.objectDeclaration_();
     } else if (this.constants.hasOwnProperty(token.text)) {
       return this.constants[token.text];
+    } else if (token.identifier) {
+      return this.identifier_(token);
     } else {
       return this.constant_(token);
     }
@@ -182,7 +186,10 @@ var Parse = (function() {
       this.readToken_();
       token = this.readToken_();
       properties.push({
-        key: key,
+        key: {
+          type: AST.Identifier,
+          value: key
+        },
         value: this.processToken_(token)
       });
       token = this.readToken_();
@@ -209,6 +216,13 @@ var Parse = (function() {
     };
   };
 
+  AST.prototype.identifier_ = function(token) {
+    return {
+      type: AST.Identifier,
+      value: token.text
+    };
+  };
+
   /**
    * The AST Compiler takes the abstract syntax tree and compiles it into a JavaScript function that evaluates the expression represented in the tree.
    */
@@ -219,7 +233,7 @@ var Parse = (function() {
     var ast = this.ast_.ast(text);
     this.state = {body: []};
     this.recurse(ast);
-    return new Function(this.state.body.join('')); // eslint-disable-line no-new-func
+    return new Function('scope', this.state.body.join('')); // eslint-disable-line no-new-func
   };
 
   ASTCompiler.prototype.recurse = function(ast) {
@@ -231,7 +245,7 @@ var Parse = (function() {
         return this.escape_(ast.value);
       case AST.Object:
         var properties = ast.properties.map(function(prop) {
-          return this.escape_(prop.key) + ':' + this.recurse(prop.value);
+          return this.escape_(prop.key.value) + ':' + this.recurse(prop.value);
         }.bind(this));
         return '{' + properties.join(',') + '}';
       case AST.Array:
@@ -239,6 +253,8 @@ var Parse = (function() {
           return this.recurse(el);
         }.bind(this));
         return '[' + elements.join(',') + ']';
+      case AST.Identifier:
+        return 'scope' + '.' + ast.value;
     }
   };
 

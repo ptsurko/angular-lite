@@ -7,9 +7,10 @@ var Compile = (function() {
     TEXT: 3
   };
 
-  function Compile($injector, $directive) {
+  function Compile($injector, $directive, $parse) {
     this.$injector_ = $injector;
     this.$directive_ = $directive;
+    this.$parse_ = $parse;
   };
 
   Compile.prototype.compile = function(node) {
@@ -70,7 +71,49 @@ var Compile = (function() {
   };
 
   Compile.prototype.compileTextNode_ = function(node) {
+    var re = new RegExp(/\{\{([\S\s]*?)\}\}/, 'gmi');
+    var match;
+    var index = 0;
+    var textParts = [];
+    while ((match = re.exec(node.textContent)) !== null) {
+      if (match.index === re.lastIndex) {
+        re.lastIndex++;
+      }
 
+      if (index < match.index) {
+        textParts.push({
+          text: node.textContent.slice(index, match.index)
+        });
+      }
+
+      var expr = match[1].trim();
+      textParts.push({
+        expr: expr
+      });
+      index = re.lastIndex;
+    }
+
+    var self = this;
+    return function(scope) {
+      function buildTextContent() {
+        var text = textParts.map(function(item) {
+          if (item.text) {
+            return item.text;
+          } else {
+            return self.$parse_.parse(item.expr)(scope);
+          }
+        });
+        node.textContent = text.join('');
+      }
+
+      textParts.forEach(function(item) {
+        if (item.expr) {
+          scope.$watch(function() {
+            return self.$parse_.parse(item.expr)(scope);
+          }, buildTextContent);
+        }
+      });
+    };
   };
 
   Compile.prototype.linkDirective_ = function(dir, element, attrs, scope) {
