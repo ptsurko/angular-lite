@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - 4.1
+env:
+  global:
+    - GH_REF: github.com/ptsurko/angular-lite.git
+    - GIT_NAME: Travis-CI
+    - GIT_EMAIL: travis@nodemeatspace.com
+    - secure: H/f5yEtjE+Xw/YUJh0l6KSeNV4OUqWU3h4kDJJPMSjZJZxIzF9TkeqpO3AiapZwXb1EXMf1tj0CzAH6yXxQp8n3ZGQC7bWqDiJKmflJtQtqkkfun0dg1dlucL2f3zUCUT6JLW5tUqOVBcnsdFSphFO9Noc7yLz9y7jng9k1vtijAWCOb0SdbQvkAopiRVumwxcw929Uk1oDDJb8vX0AdQ0m6f47/ig4BwBxW8Ya2/qh2BGXVGvB2DTsL0pdYnpuJLimiNHq9Y5Bxg+lrteZrgDsq6if1VJNP6X6ZitW5MF8jaMfDM9QbBV2NkV9bZZBg9K8PiTVObXnEkBJagX08F4tqV0U1xhZ6YapAmXuhAJywPCWS1OZnuXG/Qo8pnmGkoroiEaTLHeRcwWElOzypnCng800IA64CUnyb8863RpHLjHScJthWvNj6dEGCEg3M4psjIzounRcyGQSTId2tWev7R0n3F1I/9CQsQYuK9YryFx3VyfV7sQ/y9n2c1j6bQ7RPdnjl6oRsvm+NSN6TIynA95kqrLNqaMmlgtwX9YNc9+DYUIgH8rqH0rNhb1JWuFGQ8/cFKcRSuf2tI54ZTOE1j+1XwE1Ij0wMIon5k5tB51qA95L26/i2M8W1Aa+DkjLmozgMn8bQE86owK+nKDFSwZbay6LL4ZzFomJE6AE=
+before_install:
+  - chmod +x deploy_ghpages.sh
+before_script:
+  # - npm install
+script: bash ./deploy_ghpages.sh
+branches:
+  only:
+    - master
